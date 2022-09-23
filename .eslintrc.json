@@ -1,0 +1,89 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "overrides": [
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    
+    "rules": {
+        "@typescript-eslint/no-explicit-any": "warn",
+        "indent": ["warn", 2],
+        "quotes": ["warn", "double"],
+        "semi": ["warn", "always"],
+        
+        "no-console": "off",
+        "no-inline-comments": "warn",
+        "no-constant-condition":"off",
+        // "no-unused-expressions":"warn",
+        // "no-unused-vars":"warn",
+        // "no-unused-labels":"warn",
+        "no-empty": "warn",
+
+        // space
+        "space-before-blocks":"warn",
+        "space-before-function-paren":"warn",
+        "no-multi-spaces":"warn",
+        "space-in-parens":"warn",
+        "no-trailing-spaces":"warn",
+        "no-whitespace-before-property":"warn",
+        "no-spaced-func":"warn",
+        "no-irregular-whitespace":"warn",
+        "switch-colon-spacing":"warn",
+        "no-regex-spaces":"error",
+        "space-unary-ops":"warn",
+        "space-infix-ops":"warn",
+        "no-mixed-spaces-and-tabs":"warn",
+        "spaced-comment":"warn"  
+
+
+    }
+}
+
+
+
+// "checkForEach": true,
+// "allowImplicit": true,
+
+// // enable additional rules
+// "indent": ["error", 4],
+// "linebreak-style": ["error", "unix"],
+// "quotes": ["error", "single"],
+// 
+
+// // override configuration set by extending "eslint:recommended"
+// "no-empty": "warn",
+// "no-cond-assign": ["error", "always"],
+
+// // disable rules from base configurations
+//  "for-direction": "off",
+//   // override default options
+// "comma-dangle": ["error", "always"],
+
+// // disable now, but enable in the future
+// "one-var": "off", // ["error", "never"]
+
+// // disable
+// "init-declarations": "off",
+// "no-inline-comments": "off"
+//   // override default options
+// "comma-dangle": ["error", "always"],
+
+// // disable now, but enable in the future
+// "one-var": "off", // ["error", "never"]
+
+// // disable
+// "init-declarations": "off",
+// 

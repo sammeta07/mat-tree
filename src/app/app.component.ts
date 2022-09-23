@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'x-map';
+
+  color: ThemePalette = "accent";
+  checked = false;
+  disabled = false;
+
+  isDarkTheme = false;
+  toggleTheme () {
+    this.isDarkTheme = !this.isDarkTheme;
+  }
 }
+
