@@ -14,8 +14,8 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isDarkTheme = true;
-  leftSidenavWidth=20;
-  contentWidth=80;
+  leftSidenavWidth=25;
+  contentWidth=75;
 
   toggleTheme () {
     this.isDarkTheme = !this.isDarkTheme;
@@ -28,15 +28,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // fillerNav = Array.from({length: 25}, (_, i) => `Nav Item ${i + 1}`);
 
-  fillerContent = Array.from(
-    {length: 25},
-    () =>
-      `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-       labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-       laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-       voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-       cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
-  );
+  // fillerContent = Array.from(
+  //   {length: 25},
+  //   () =>
+  //     `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+  //      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+  //      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+  //      voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+  //      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+  // );
 
   private _mobileQueryListener: () => void;
 
@@ -101,63 +101,45 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 }
 interface FoodNode {
   name: string;
+  id:number;
   children?: FoodNode[];
 }
 
 const TREE_DATA: FoodNode[] = [
   {
     name: 'Fruit',
-    children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
+    id:1,
+    children: [{name: 'Apple', id:2}, {name: 'Banana', id:3}, {name: 'Fruit loops', id:4}]
   },
   {
     name: 'Vegetables',
+    id:5,
     children: [
       {
         name: 'Green',
-        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
+        id:6,
+        children: [{name: 'Broccoli', id:7,}, {name: 'Brussels sprouts', id:8,}],
       },
       {
         name: 'Orange',
-        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
+        id:9,
+        children: [{name: 'Pumpkins',  id:10,}, {name: 'Carrots',  id:11,}],
       },
     ],
   },
   {
     name: 'Vegetables',
+    id:12,
     children: [
       {
         name: 'Green',
-        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
+        id:13,
+        children: [{name: 'Broccoli',  id:14,}, {name: 'Brussels sprouts',  id:15,}],
       },
       {
         name: 'Orange',
-        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
-      },
-    ],
-  },
-  {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
-      },
-      {
-        name: 'Orange',
-        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
-      },
-    ],
-  },
-  {
-    name: 'Vegetables',
-    children: [
-      {
-        name: 'Green',
-        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
-      },
-      {
-        name: 'Orange',
-        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
+        id:16,
+        children: [{name: 'Pumpkins',  id:17,}, {name: 'Carrots',  id:18,}],
       },
     ],
   },

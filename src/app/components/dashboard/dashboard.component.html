@@ -12,16 +12,16 @@
         </button>
       </mat-toolbar>
       <mat-tree fxFlex="95" fxFill style="overflow: auto" [dataSource]="dataSource" [treeControl]="treeControl"
-        class="example-tree" style="padding:3px">
+        class="example-tree" style="padding:10px;overflow: auto">
         <!-- This is the tree node template for leaf nodes -->
         <!-- There is inline padding applied to this node using styles.
           This padding value depends on the mat-icon-button width. -->
 
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle class="leftTreeBranchLines">
           <div class="setBorderChild"></div>
-          <div class="navListPadding" fxFlex>
+          <div class="navListPadding" fxFlex >
             <mat-nav-list>
-              <a mat-list-item routerLink=".">
+              <a mat-list-item [routerLink]="['canvas',node.id]">
                 {{ node.name }}
               </a>
             </mat-nav-list>
@@ -40,7 +40,7 @@
             </button>
             <div class="navListPadding" fxFlex>
               <mat-nav-list>
-                <a mat-list-item routerLink=".">
+                <a mat-list-item [routerLink]="['canvas',node.id]">
                   {{ node.name }}
                 </a>
               </mat-nav-list>
@@ -65,11 +65,15 @@
         </button>
       </mat-toolbar>
 
-      <div fxFlex="95" style="overflow: auto">
-        <p *ngFor="let content of fillerContent">
+      <div fxFlex="95" style="padding:10px;overflow: auto">
+        <!-- <p *ngFor="let content of fillerContent">
           {{ content }}
-        </p>
+        </p> -->
+        <router-outlet></router-outlet>
       </div>
+
+      
+      
     </div>
   </as-split-area>
 </as-split>
