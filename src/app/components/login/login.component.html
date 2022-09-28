@@ -1,1 +1,36 @@
-<p>login works!</p>
+<div  fxLayout="row" fxFill fxLayoutAlign="center center">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <mat-card>
+            <mat-card-title> Login to App </mat-card-title>
+            <mat-card-content fxLayout="column" fxFill fxLayoutAlign="center center">
+                <mat-form-field appearance="outline">
+                    <mat-label>Client ID</mat-label>
+                    <input matInput required formControlName="clientID" name="clientID" type="text">
+                    <mat-icon matSuffix color="grey">portrait</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Email ID</mat-label>
+                    <input matInput required formControlName="emailId" name="emailId" type="text">
+                    <mat-icon color="grey" matSuffix>email</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput required type="text" formControlName="password" name="password">
+                    <mat-icon matSuffix color="grey">vpn_key</mat-icon>
+                </mat-form-field>
+                
+                <mat-checkbox color="accent" name="rememberMe" formControlName="rememberMe" (change)="onChangeRememberMeCheckbox(loginForm)">Remember Me!
+                </mat-checkbox>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" type="submit">Login</button>
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</div>
+
+<!-- <div fxLayout="row" fxFill fxLayoutAlign="center center" >
+    <div style="background-color: blue; width:200px;height:100px">1</div>
+</div> -->

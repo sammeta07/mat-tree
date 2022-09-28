@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +7,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  constructor() { }
+  loginForm!: FormGroup;
+  constructor(
+    private fb              : FormBuilder,
+  ) { }
 
   ngOnInit(): void {
+    this.initializeLoginForm();
+  }
+  onLogin= async ()=>{}
+  initializeLoginForm(){
+    const numberRegX = "^[0-9]*$";
+    this.loginForm = this.fb.group({
+      clientID  : [null, [Validators.required, Validators.pattern(numberRegX)]],
+      emailId   : [null, Validators.required],
+      password  : [null, Validators.required],
+      rememberMe: [false],
+    });
+  }
+  onChangeRememberMeCheckbox(loginFormData: { value: { rememberMe: any; }; }){
+    console.log(loginFormData.value.rememberMe);
+    if(loginFormData.value.rememberMe){
+     
+    }else {
+    }
   }
 
 }

@@ -3,15 +3,15 @@
     fxLayout="column"
     fxLayoutGap="2px"
     class="container"
-    style="padding: 2%"
+    [style.padding.px]="sharedService.outerPadding | async"
   >
-    <mat-toolbar fxFlex="8" class="child-1">
+    <mat-toolbar fxFlex="6">
       <button
         mat-icon-button
         class="example-icon"
         aria-label="Example icon-button with menu icon"
       >
-        <mat-icon>settings</mat-icon>
+        <mat-icon>home</mat-icon>
       </button>
       <span>X-Map</span>
       <span class="example-spacer"></span>
@@ -39,7 +39,7 @@
         <mat-icon>share</mat-icon>
       </button>
     </mat-toolbar>
-    <mat-card fxFlex="92" class="child-2">
+    <mat-card fxFlex="94">
       <router-outlet></router-outlet>
     </mat-card>
   </div>

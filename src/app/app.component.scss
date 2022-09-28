@@ -1,15 +1,13 @@
 .container {
   height: 100vh;
-}
-.child-1 {
-  background-color: orange;
-}
-.child-2 {
-  background-color: rgb(248, 194, 200);
+  background-color: rgba(255, 212, 195, 0.968);
 }
 
 .example-spacer {
   flex: 1 1 auto;
 }
 
-
+mat-card {
+  padding: 0px;
+  border-radius: 0px;
+}

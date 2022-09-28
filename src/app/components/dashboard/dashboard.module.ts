@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { SidenavRoutingModule } from './sidenav-routing.module';
-import { SidenavComponent } from './sidenav.component';
+import { DashboardRoutingModule } from './dashboard-routing.module';
+import { DashboardComponent } from './dashboard.component';
 import { AngularMaterialModule } from 'src/app/shared/material-design/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AngularSplitModule } from 'angular-split';
 
 
 @NgModule({
   declarations: [
-    SidenavComponent
+    DashboardComponent
   ],
   imports: [
     CommonModule,
-    SidenavRoutingModule,
+    DashboardRoutingModule,
     AngularMaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AngularSplitModule
   ]
 })
-export class SidenavModule { }
+export class DashboardModule { }

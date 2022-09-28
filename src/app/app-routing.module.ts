@@ -1,13 +1,12 @@
-import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'sidenav', pathMatch: 'full'},
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'login', component: LoginComponent},
-  // { path: 'sidenav', component: SidenavComponent},
-  { path: 'sidenav', loadChildren: () => import('./components/sidenav/sidenav.module').then(m => m.SidenavModule) }
+  { path: 'dashboard', loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule) },
 ];
 
 @NgModule({

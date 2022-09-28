@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
+import { SharedService } from './shared/service/shared.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,10 @@ export class AppComponent {
   isDarkTheme = false;
   toggleTheme () {
     this.isDarkTheme = !this.isDarkTheme;
+  }
+
+  constructor(public sharedService:SharedService){
+
   }
 }
 
