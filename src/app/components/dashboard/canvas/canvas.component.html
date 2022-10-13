@@ -1,2 +1,10 @@
-<p>canvas works!</p>
-{{canvasId | json}}
+<as-split direction="horizontal">
+    <as-split-area [size]="85" style="background-color: rgb(250, 131, 131);">
+        <h1>Canvas</h1>
+        <p>canvas works!</p>
+        {{canvasId | json}}
+    </as-split-area>
+    <as-split-area [size]="15" style="background-color: rgb(173, 241, 250);">
+        <h1>Attributes</h1>
+    </as-split-area>
+</as-split>

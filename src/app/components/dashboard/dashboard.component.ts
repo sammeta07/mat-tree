@@ -13,14 +13,8 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  isDarkTheme = true;
-  leftSidenavWidth=25;
-  contentWidth=75;
-
-  toggleTheme () {
-    this.isDarkTheme = !this.isDarkTheme;
-  }
-
+  leftSidenavWidth=20;
+  contentWidth=80;
 
   ngOnInit(): void {
   }

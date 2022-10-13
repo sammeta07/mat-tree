@@ -1,6 +1,6 @@
 <as-split direction="horizontal">
   <as-split-area [size]="leftSidenavWidth">
-    <div fxFlex fxLayout="column" fxLayoutGap="5px" style="overflow: hidden">
+    <div fxFlex fxLayout="column" style="overflow: hidden">
       <mat-toolbar fxFlex="5" fxFill class="leftToolbar">
         <h1 class="example-app-name">Search</h1>
         <span class="example-spacer"></span>
@@ -56,7 +56,7 @@
     </div>
   </as-split-area>
   <as-split-area [size]="contentWidth">
-    <div fxLayout="column" fxFill fxFlexAlign="stretch" fxLayoutGap="5px" style="overflow: hidden">
+    <div fxLayout="column" fxFill fxFlexAlign="stretch"  style="overflow: hidden">
       <mat-toolbar class="example-toolbar" fxFlex="5">
         <h1 class="example-app-name">Heading</h1>
         <span class="example-spacer"></span>
@@ -65,15 +65,12 @@
         </button>
       </mat-toolbar>
 
-      <div fxFlex="95" style="padding:10px;overflow: auto">
+      <div fxFlex="95" style="overflow: auto">
         <!-- <p *ngFor="let content of fillerContent">
           {{ content }}
         </p> -->
         <router-outlet></router-outlet>
       </div>
-
-      
-      
     </div>
   </as-split-area>
 </as-split>

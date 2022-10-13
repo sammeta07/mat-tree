@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { CanvasRoutingModule } from './canvas-routing.module';
 import { CanvasComponent } from './canvas.component';
+import { AngularSplitModule } from 'angular-split';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { CanvasComponent } from './canvas.component';
   ],
   imports: [
     CommonModule,
-    CanvasRoutingModule
+    CanvasRoutingModule,
+    AngularSplitModule
   ]
 })
 export class CanvasModule { }
