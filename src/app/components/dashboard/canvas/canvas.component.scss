@@ -1,0 +1,30 @@
+//  sapcer for toolbar to make some buttons right  ----------------------start--------------------------------------
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+// expansion panel start
+.example-action-buttons {
+  padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+// expansion panel end
+
+//
+mat-card {
+  border-radius: 0;
+  padding: 5px;
+}

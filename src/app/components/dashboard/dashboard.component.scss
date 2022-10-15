@@ -1,39 +1,37 @@
-
 //  sapcer for toolbar to make some buttons right  ----------------------start--------------------------------------
-  .example-spacer {
-    flex: 1 1 auto;
-  }
+.example-spacer {
+  flex: 1 1 auto;
+}
 //  sapcer for toolbar to make some buttons right ------------------------end---------------------------------------
 
-
 // -----------------------------------------------------mat tree start-------------------------------------------------
-  .example-tree-invisible {
-    display: none;
-  }
+.example-tree-invisible {
+  display: none;
+}
 
-  /*
+/*
   * This padding sets alignment of the nested nodes.
   */
-  .example-tree .mat-nested-tree-node div[role=group] {
-    padding-left: 40px;
-  }
+.example-tree .mat-nested-tree-node div[role="group"] {
+  padding-left: 40px;
+}
 
-  /*
+/*
   * Padding for leaf nodes.
   * Leaf nodes need to have padding so as to align with other non-leaf nodes
   * under the same parent.
   */
-  .example-tree div[role=group] > .mat-tree-node {
-    padding-left: 10px;
-  }
+.example-tree div[role="group"] > .mat-tree-node {
+  padding-left: 10px;
+}
 // -----------------------------------------------------mat tree end-------------------------------------------------
 
 //----------------------------------------------mat tree branch lines start------------------------------------------
-.setBorderParent{
+.setBorderParent {
   border-bottom: 1px solid rgb(170, 170, 170);
   width: 22px;
 }
-.setBorderChild{
+.setBorderChild {
   border-bottom: 1px solid rgb(170, 170, 170);
   width: 22px;
   position: relative;
@@ -41,25 +39,32 @@
   top: 0px;
 }
 //----------------------------------------------mat tree branch lines end------------------------------------------
-mat-nav-list{
-  min-width: auto !important; 
+mat-nav-list {
+  min-width: auto !important;
   padding: 0;
   border: 1px solid rgb(170, 170, 170);
 }
-.leftToolbar{
-  margin: 0px !important;
-}
 
-.leftTreeBranchLines{
+.leftTreeBranchLines {
   border-left: 1px solid rgb(170, 170, 170);
 }
 
-// 
-.mat-icon-rtl-mirror{
-  background-color: rgb(216, 248, 255);
+//
+// .mat-icon-rtl-mirror {
+//   background-color: rgb(216, 248, 255);
+// }
+
+//
+.navListPadding {
+  padding-top: 3px;
 }
 
 //
-.navListPadding{
-  padding-top: 3px
+mat-card {
+  border-radius: 0;
+  padding: 5px;
 }
+
+// mat tree checkbox start ----------------------------------------------->>>
+
+// mat tree checkbox end ----------------------------------------------->>>

@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SharedService {
+  outerPadding = new BehaviorSubject(5);
 
-  outerPadding=new BehaviorSubject(10);
-
-  constructor() { }
+  constructor() {}
 }

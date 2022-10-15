@@ -1,7 +1,6 @@
-
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -28,7 +27,8 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 const modules = [
   MatButtonModule,
@@ -39,6 +39,7 @@ const modules = [
   MatSidenavModule,
   MatListModule,
   MatGridListModule,
+  MatListModule,
   MatCheckboxModule,
   // MatAutocompleteModule,
   // MatBadgeModule,
@@ -48,10 +49,10 @@ const modules = [
   MatCardModule,
   MatCheckboxModule,
   // MatChipsModule,
-  // MatDatepickerModule,
+  MatDatepickerModule,
   MatDialogModule,
   MatDividerModule,
-  // MatExpansionModule,
+  MatExpansionModule,
   // MatGridListModule,
   MatIconModule,
   MatInputModule,
@@ -123,6 +124,3 @@ export class AngularMaterialModule {}
 //     MatTooltipModule,
 //     MatTreeModule,
 //     ScrollingModule,
-
-
-

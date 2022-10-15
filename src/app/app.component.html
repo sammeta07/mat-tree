@@ -1,18 +1,11 @@
 <div [ngClass]="isDarkTheme ? 'dark-theme' : 'light-theme'">
   <div
     fxLayout="column"
-    fxLayoutGap="2px"
+    fxLayoutGap="3px"
     class="container"
     [style.padding.px]="sharedService.outerPadding | async"
   >
     <mat-toolbar fxFlex="6">
-      <button
-        mat-icon-button
-        class="example-icon"
-        aria-label="Example icon-button with menu icon"
-      >
-        <mat-icon>home</mat-icon>
-      </button>
       <span>X-Map</span>
       <span class="example-spacer"></span>
       <mat-slide-toggle
