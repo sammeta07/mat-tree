@@ -3,7 +3,7 @@
     [size]="80"
     style="background-color: rgb(241, 71, 9); overflow: hidden"
     fxLayout="column"
-    fxLayoutGap="2px"
+    fxLayoutGap="1px"
     fxLayoutAlign="start stretch"
   >
     <mat-toolbar fxFlex="5">
@@ -14,14 +14,9 @@
     </mat-toolbar>
 
     <mat-card fxFlex="*" style="overflow: auto">
-      <mat-accordion
-        class="example-headers-align"
-        multi
-        fxLayout="column"
-        fxLayoutGap="5px"
-      >
+      <mat-accordion class="example-headers-align" multi>
         <mat-expansion-panel *ngFor="let c of canvas">
-          <mat-expansion-panel-header>
+          <mat-expansion-panel-header style="height: 30px">
             <mat-panel-title> {{ c }} </mat-panel-title>
             <mat-panel-description>
               {{ canvasId | json }}
@@ -41,7 +36,7 @@
     [size]="20"
     style="background-color: rgb(241, 71, 9); overflow: hidden"
     fxLayout="column"
-    fxLayoutGap="2px"
+    fxLayoutGap="1px"
     fxLayoutAlign="start stretch"
   >
     <mat-toolbar fxFlex="5">
