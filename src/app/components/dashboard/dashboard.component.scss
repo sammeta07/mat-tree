@@ -32,7 +32,7 @@
 }
 .parent:hover,
 .child:hover {
-  background-color: rgb(43, 42, 42);
+  background-color: rgb(228, 241, 240);
   z-index: 0;
 }
 
@@ -107,4 +107,9 @@ mat-card {
 }
 .tree-menu-img-btn {
   border-right: 1px solid rgb(90, 86, 86);
+}
+
+// mat tree node names
+.tree-node-name-btn:hover{
+  cursor: pointer;
 }

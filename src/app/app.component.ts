@@ -14,7 +14,7 @@ export class AppComponent {
   checked = false;
   disabled = false;
 
-  isDarkTheme = true;
+  isDarkTheme = false;
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
   }

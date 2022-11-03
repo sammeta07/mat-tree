@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class SharedService {
-  outerPadding = new BehaviorSubject(5);
+  outerPadding = new BehaviorSubject(50);
 
   constructor() {}
 }
