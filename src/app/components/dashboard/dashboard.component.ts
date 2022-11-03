@@ -1,154 +1,215 @@
-import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef,OnInit, Component, OnDestroy, Renderer2, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import {
+  OnInit,
+  Component,
+  OnDestroy,
+  Renderer2,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { SharedService } from 'src/app/shared/service/shared.service';
-import { NestedTreeControl } from '@angular/cdk/tree';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { SelectionModel } from '@angular/cdk/collections';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from '@angular/material/tree';
+import { TodoItemNode, TodoItemFlatNode } from './tree-menu.model';
+import { TreeMenuService } from './tree-menu.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  providers: [TreeMenuService],
 })
-
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+  // -------------------------- Tree Start------------------------------------------------------------------
+  TodoItemNode: TodoItemNode = new TodoItemNode();
+  TodoItemFlatNode: TodoItemFlatNode = new TodoItemFlatNode();
 
-  isDarkTheme = true;
-  leftSidenavWidth=25;
-  contentWidth=75;
+  /** Map from flat node to nested node. This helps us finding the nested node to be modified */
+  flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
 
-  toggleTheme () {
-    this.isDarkTheme = !this.isDarkTheme;
+  /** Map from nested node to flattened node. This helps us to keep the same object for selection */
+  nestedNodeMap = new Map<TodoItemNode, TodoItemFlatNode>();
+
+  /** A selected parent node to be inserted */
+  selectedParent: TodoItemFlatNode | null = null;
+
+  /** The new item's name */
+  newItemName = '';
+
+  treeControl: FlatTreeControl<TodoItemFlatNode>;
+
+  treeFlattener: MatTreeFlattener<TodoItemNode, TodoItemFlatNode>;
+
+  dataSource: MatTreeFlatDataSource<TodoItemNode, TodoItemFlatNode>;
+
+  /** The selection for checklist */
+  checklistSelection = new SelectionModel<TodoItemFlatNode>(
+    true /* multiple */
+  );
+
+  getLevel = (node: TodoItemFlatNode) => node.level;
+
+  isExpandable = (node: TodoItemFlatNode) => node.expandable;
+
+  getChildren = (node: TodoItemNode): TodoItemNode[] => node.children;
+
+  hasChild = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.expandable;
+
+  hasNoContent = (_: number, _nodeData: TodoItemFlatNode) =>
+    _nodeData.item === '';
+
+  /**
+   * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
+   */
+  transformer = (node: TodoItemNode, level: number) => {
+    const existingNode = this.nestedNodeMap.get(node);
+    const flatNode =
+      existingNode && existingNode.item === node.item
+        ? existingNode
+        : new TodoItemFlatNode();
+    flatNode.item = node.item;
+    flatNode.level = level;
+    flatNode.expandable = !!node.children?.length;
+    this.flatNodeMap.set(flatNode, node);
+    this.nestedNodeMap.set(node, flatNode);
+    return flatNode;
+  };
+
+  /** Whether all the descendants of the node are selected. */
+  descendantsAllSelected(node: TodoItemFlatNode): boolean {
+    const descendants = this.treeControl.getDescendants(node);
+    const descAllSelected =
+      descendants.length > 0 &&
+      descendants.every((child) => {
+        return this.checklistSelection.isSelected(child);
+      });
+    return descAllSelected;
   }
 
-
-  ngOnInit(): void {
+  /** Whether part of the descendants are selected */
+  descendantsPartiallySelected(node: TodoItemFlatNode): boolean {
+    const descendants = this.treeControl.getDescendants(node);
+    const result = descendants.some((child) =>
+      this.checklistSelection.isSelected(child)
+    );
+    return result && !this.descendantsAllSelected(node);
   }
-  mobileQuery: MediaQueryList;
 
-  // fillerNav = Array.from({length: 25}, (_, i) => `Nav Item ${i + 1}`);
+  /** Toggle the to-do item selection. Select/deselect all the descendants node */
+  todoItemSelectionToggle(node: TodoItemFlatNode): void {
+    this.checklistSelection.toggle(node);
+    const descendants = this.treeControl.getDescendants(node);
+    this.checklistSelection.isSelected(node)
+      ? this.checklistSelection.select(...descendants)
+      : this.checklistSelection.deselect(...descendants);
 
-  // fillerContent = Array.from(
-  //   {length: 25},
-  //   () =>
-  //     `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-  //      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-  //      laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-  //      voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-  //      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
-  // );
-
-  private _mobileQueryListener: () => void;
-
-
-  treeControl = new NestedTreeControl<FoodNode>(node => node.children);
-  dataSource = new MatTreeNestedDataSource<FoodNode>();
-  hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
-
-  // @ViewChild('sizeBarGrabber', { read: ElementRef, static: false })
-  // sizeBarGrabber!: ElementRef;
-
-
-  // @ViewChild('sideNavContainer')
-  // sideNavContainer!: ElementRef;
-  
-
-  ngAfterViewInit(){
-    // let sideNavContainer = this.sideNavContainer.nativeElement;
-    // console.log(sideNavContainer);
+    // Force update for the parent
+    descendants.forEach((child) => this.checklistSelection.isSelected(child));
+    this.checkAllParentsSelection(node);
   }
+
+  /** Toggle a leaf to-do item selection. Check all the parents to see if they changed */
+  todoLeafItemSelectionToggle(node: TodoItemFlatNode): void {
+    this.checklistSelection.toggle(node);
+    this.checkAllParentsSelection(node);
+  }
+
+  /* Checks all the parents when a leaf node is selected/unselected */
+  checkAllParentsSelection(node: TodoItemFlatNode): void {
+    let parent: TodoItemFlatNode | null = this.getParentNode(node);
+    while (parent) {
+      this.checkRootNodeSelection(parent);
+      parent = this.getParentNode(parent);
+    }
+  }
+
+  /** Check root node checked state and change it accordingly */
+  checkRootNodeSelection(node: TodoItemFlatNode): void {
+    const nodeSelected = this.checklistSelection.isSelected(node);
+    const descendants = this.treeControl.getDescendants(node);
+    const descAllSelected =
+      descendants.length > 0 &&
+      descendants.every((child) => {
+        return this.checklistSelection.isSelected(child);
+      });
+    if (nodeSelected && !descAllSelected) {
+      this.checklistSelection.deselect(node);
+    } else if (!nodeSelected && descAllSelected) {
+      this.checklistSelection.select(node);
+    }
+  }
+
+  /* Get the parent node of a node */
+  getParentNode(node: TodoItemFlatNode): TodoItemFlatNode | null {
+    const currentLevel = this.getLevel(node);
+
+    if (currentLevel < 1) {
+      return null;
+    }
+
+    const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
+
+    for (let i = startIndex; i >= 0; i--) {
+      const currentNode = this.treeControl.dataNodes[i];
+
+      if (this.getLevel(currentNode) < currentLevel) {
+        return currentNode;
+      }
+    }
+    return null;
+  }
+
+  /** Select the category so we can insert the new item. */
+  addNewItem(node: TodoItemFlatNode) {
+    const parentNode = this.flatNodeMap.get(node);
+    this.treeMenuService.insertItem(parentNode!, '');
+    this.treeControl.expand(node);
+  }
+
+  /** Save the node to database */
+  saveNode(node: TodoItemFlatNode, itemValue: string) {
+    const nestedNode = this.flatNodeMap.get(node);
+    this.treeMenuService.updateItem(nestedNode!, itemValue);
+  }
+
+  // -------------------------- Tree End------------------------------------------------------------------
+
+  leftSidenavWidth = 20;
+  contentWidth = 80;
+
+  ngOnInit(): void {}
+
+  ngAfterViewInit() {}
   showFiller = false;
   constructor(
-    public sharedService:SharedService,
-    changeDetectorRef: ChangeDetectorRef, 
-    media: MediaMatcher,
-    private renderer: Renderer2,
-    ) {
+    private treeMenuService: TreeMenuService,
+    public sharedService: SharedService,
+    private renderer: Renderer2
+  ) {
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      this.getLevel,
+      this.isExpandable,
+      this.getChildren
+    );
+    this.treeControl = new FlatTreeControl<TodoItemFlatNode>(
+      this.getLevel,
+      this.isExpandable
+    );
+    this.dataSource = new MatTreeFlatDataSource(
+      this.treeControl,
+      this.treeFlattener
+    );
 
-      this.dataSource.data = TREE_DATA;
-
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    // this.mobileQuery.addListener(this._mobileQueryListener);
-    
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
-      mql.addEventListener("change", () => {
-        this._mobileQueryListener;
-      });
-      // this.fillerNav[5]='asdfghjklytrewesdfghjklkjfgfsdghjkravvsdfghjklsdfghjklsdfghjkty'
-
-
-  }
-
-  ngOnDestroy(): void {
-    // this.mobileQuery.removeListener(this._mobileQueryListener);
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    mql.removeEventListener("change", () => {
-      this._mobileQueryListener;
+    treeMenuService.dataChange.subscribe((data) => {
+      this.dataSource.data = data;
     });
   }
 
-
-
-
-  // tiles: Tile[] = [
-  //   {text: 'One', cols: 3, rows: 1, color: 'lightblue'},
-  //   {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},
-  //   {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
-  //   {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
-  // ];
-
+  ngOnDestroy(): void {}
 }
-interface FoodNode {
-  name: string;
-  id:number;
-  children?: FoodNode[];
-}
-
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Fruit',
-    id:1,
-    children: [{name: 'Apple', id:2}, {name: 'Banana', id:3}, {name: 'Fruit loops', id:4}]
-  },
-  {
-    name: 'Vegetables',
-    id:5,
-    children: [
-      {
-        name: 'Green',
-        id:6,
-        children: [{name: 'Broccoli', id:7,}, {name: 'Brussels sprouts', id:8,}],
-      },
-      {
-        name: 'Orange',
-        id:9,
-        children: [{name: 'Pumpkins',  id:10,}, {name: 'Carrots',  id:11,}],
-      },
-    ],
-  },
-  {
-    name: 'Vegetables',
-    id:12,
-    children: [
-      {
-        name: 'Green',
-        id:13,
-        children: [{name: 'Broccoli',  id:14,}, {name: 'Brussels sprouts',  id:15,}],
-      },
-      {
-        name: 'Orange',
-        id:16,
-        children: [{name: 'Pumpkins',  id:17,}, {name: 'Carrots',  id:18,}],
-      },
-    ],
-  },
-];
-// export interface Tile {
-//   color: string;
-//   cols: number;
-//   rows: number;
-//   text: string;
-// }
-
-

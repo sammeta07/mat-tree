@@ -1,65 +1,110 @@
-
 //  sapcer for toolbar to make some buttons right  ----------------------start--------------------------------------
-  .example-spacer {
-    flex: 1 1 auto;
-  }
+.example-spacer {
+  flex: 1 1 auto;
+}
 //  sapcer for toolbar to make some buttons right ------------------------end---------------------------------------
 
-
 // -----------------------------------------------------mat tree start-------------------------------------------------
-  .example-tree-invisible {
-    display: none;
-  }
+.example-tree-invisible {
+  display: none;
+}
 
-  /*
+/*
   * This padding sets alignment of the nested nodes.
   */
-  .example-tree .mat-nested-tree-node div[role=group] {
-    padding-left: 40px;
-  }
+.example-tree .mat-nested-tree-node div[role="group"] {
+  padding-left: 40px !important;
+}
 
-  /*
+/*
   * Padding for leaf nodes.
   * Leaf nodes need to have padding so as to align with other non-leaf nodes
   * under the same parent.
   */
-  .example-tree div[role=group] > .mat-tree-node {
-    padding-left: 10px;
-  }
+.example-tree div[role="group"] > .mat-tree-node {
+  padding-left: 10px;
+}
+.mat-tree-node {
+  min-height: 24px;
+  height: 24px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.parent:hover,
+.child:hover {
+  background-color: rgb(43, 42, 42);
+  z-index: 0;
+}
+
+.mat-tree {
+  font-family: monospace;
+}
+.mat-icon-button {
+  width: 24px;
+  height: 24px;
+  line-height: 24px !important;
+}
+.parent .mat-icon,
+.child .mat-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
 // -----------------------------------------------------mat tree end-------------------------------------------------
 
-//----------------------------------------------mat tree branch lines start------------------------------------------
-.setBorderParent{
-  border-bottom: 1px solid rgb(170, 170, 170);
-  width: 22px;
-}
-.setBorderChild{
-  border-bottom: 1px solid rgb(170, 170, 170);
-  width: 22px;
-  position: relative;
-  left: -10px;
-  top: 0px;
-}
-//----------------------------------------------mat tree branch lines end------------------------------------------
-mat-nav-list{
-  min-width: auto !important; 
-  padding: 0;
-  border: 1px solid rgb(170, 170, 170);
-}
-.leftToolbar{
-  margin: 0px !important;
-}
-
-.leftTreeBranchLines{
-  border-left: 1px solid rgb(170, 170, 170);
-}
-
-// 
-.mat-icon-rtl-mirror{
-  background-color: rgb(216, 248, 255);
-}
-
 //
-.navListPadding{
-  padding-top: 3px
+mat-card {
+  border-radius: 0;
+  padding: 5px;
+}
+
+// mat tree checkbox start ----------------------------------------------->>>
+.mat-form-field {
+  margin-right: 4px;
+}
+// mat tree checkbox end ----------------------------------------------->>>
+
+// Branch lines start ----------------------------------------------->>>
+
+.lines1,
+.lines3 {
+  height: 13px;
+  width: 12px;
+  border-left: 1px solid rgb(90, 86, 86);
+  border-bottom: 1px solid rgb(90, 86, 86);
+}
+
+.lines2,
+.lines4 {
+  height: 13px;
+  border-left: 1px solid rgb(90, 86, 86);
+}
+
+// mat tree checkbox end ----------------------------------------------->>>
+
+.parent {
+  border: 1px solid rgb(90, 86, 86);
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  min-width: 0 !important;
+}
+.child {
+  border: 1px solid rgb(90, 86, 86);
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  min-width: 0 !important;
+}
+.tree-exp-btn {
+  border-right: 1px solid rgb(90, 86, 86);
+}
+.tree-menu-btn {
+  border-left: 1px solid rgb(90, 86, 86);
+}
+.tree-menu-img-btn {
+  border-right: 1px solid rgb(90, 86, 86);
 }

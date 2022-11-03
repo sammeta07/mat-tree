@@ -5,22 +5,19 @@ import { SharedService } from './shared/service/shared.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'x-map';
 
-  color: ThemePalette = "accent";
+  color: ThemePalette = 'accent';
   checked = false;
   disabled = false;
 
-  isDarkTheme = false;
-  toggleTheme () {
+  isDarkTheme = true;
+  toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
   }
 
-  constructor(public sharedService:SharedService){
-
-  }
+  constructor(public sharedService: SharedService) {}
 }
-

@@ -1,18 +1,11 @@
 <div [ngClass]="isDarkTheme ? 'dark-theme' : 'light-theme'">
   <div
     fxLayout="column"
-    fxLayoutGap="2px"
+    fxLayoutGap="1px"
     class="container"
     [style.padding.px]="sharedService.outerPadding | async"
   >
     <mat-toolbar fxFlex="6">
-      <button
-        mat-icon-button
-        class="example-icon"
-        aria-label="Example icon-button with menu icon"
-      >
-        <mat-icon>home</mat-icon>
-      </button>
       <span>X-Map</span>
       <span class="example-spacer"></span>
       <mat-slide-toggle
@@ -22,21 +15,20 @@
         [checked]="checked"
         [disabled]="disabled"
       >
-        Slide me!
       </mat-slide-toggle>
       <button
         mat-icon-button
         class="example-icon favorite-icon"
         aria-label="Example icon-button with heart icon"
       >
-        <mat-icon>favorite</mat-icon>
+        <mat-icon>person</mat-icon>
       </button>
       <button
         mat-icon-button
         class="example-icon"
         aria-label="Example icon-button with share icon"
       >
-        <mat-icon>share</mat-icon>
+        <mat-icon>logout</mat-icon>
       </button>
     </mat-toolbar>
     <mat-card fxFlex="94">
