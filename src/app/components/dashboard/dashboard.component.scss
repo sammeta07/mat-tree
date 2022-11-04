@@ -9,30 +9,24 @@
   display: none;
 }
 
-/*
-  * This padding sets alignment of the nested nodes.
-  */
 .example-tree .mat-nested-tree-node div[role="group"] {
-  padding-left: 40px !important;
+  padding-left: 25px;
+}
+.example-tree div[role="group"] > .mat-tree-node {
+  // padding-left: 20px;
+  min-height: 26px; // dont change it must be 26
 }
 
-/*
-  * Padding for leaf nodes.
-  * Leaf nodes need to have padding so as to align with other non-leaf nodes
-  * under the same parent.
-  */
-.example-tree div[role="group"] > .mat-tree-node {
-  padding-left: 10px;
-}
-.mat-tree-node {
+.tree-node {
   min-height: 24px;
   height: 24px;
   font-weight: 600;
-  margin-bottom: 2px;
+  // margin-bottom: 2px;
 }
+
 .parent:hover,
 .child:hover {
-  background-color: rgb(228, 241, 240);
+  background-color: rgb(240, 240, 219);
   z-index: 0;
 }
 
@@ -57,6 +51,7 @@
 mat-card {
   border-radius: 0;
   padding: 5px;
+  background-color: rgb(253, 221, 248);
 }
 
 // mat tree checkbox start ----------------------------------------------->>>
@@ -110,6 +105,6 @@ mat-card {
 }
 
 // mat tree node names
-.tree-node-name-btn:hover{
+.tree-node-name-btn:hover {
   cursor: pointer;
 }
