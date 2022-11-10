@@ -122,7 +122,7 @@ export interface TreeData {
   children: TreeData[];
   selected?: boolean;
   indeterminate?: boolean;
-  parent?: TreeData;
+  parent?: any;
 
   ok?: boolean;
 }

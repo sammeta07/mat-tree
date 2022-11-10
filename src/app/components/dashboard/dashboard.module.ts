@@ -5,18 +5,19 @@ import { AngularMaterialModule } from 'src/app/shared/material-design/material.m
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularSplitModule } from 'angular-split';
 import { CommonModule } from '@angular/common';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HighlightPipe } from 'src/app/shared/pipes/highlight.pipe';
 
 @NgModule({
-  declarations: [
-    DashboardComponent
-  ],
+  declarations: [DashboardComponent, HighlightPipe],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     AngularMaterialModule,
     FlexLayoutModule,
-    AngularSplitModule
-  ]
+    AngularSplitModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
-export class DashboardModule { }
+export class DashboardModule {}

@@ -14,21 +14,21 @@ import { Subscription } from 'rxjs';
 const TREE_DATA: TreeData[] = [
   {
     id: 1,
-    name: 'John',
+    name: 'john',
     description: 'Father',
     children: [
       {
-        id: 3,
+        id: 2,
         name: 'Ken',
         description: 'children',
         children: [
           {
-            id: 5,
+            id: 3,
             name: 'Vaggelis13',
             description: 'GrandChildre14',
             children: [
               {
-                id: 5,
+                id: 4,
                 name: 'Vaggelis11',
                 description: 'GrandChildren12',
                 children: [],
@@ -38,12 +38,12 @@ const TREE_DATA: TreeData[] = [
         ],
       },
       {
-        id: 4,
+        id: 5,
         name: 'Bond2',
         description: 'children',
         children: [
           {
-            id: 5,
+            id: 6,
             name: 'Vaggelis9',
             description: 'GrandChildren10',
             children: [],
@@ -51,24 +51,24 @@ const TREE_DATA: TreeData[] = [
         ],
       },
       {
-        id: 5,
+        id: 7,
         name: 'Vaggelis1',
         description: 'GrandChildren5',
         children: [
           {
-            id: 5,
+            id: 8,
             name: 'Vaggelis2',
             description: 'GrandChildren6',
             children: [],
           },
           {
-            id: 5,
+            id: 9,
             name: 'Vaggelis3',
             description: 'GrandChildren7',
             children: [],
           },
           {
-            id: 5,
+            id: 10,
             name: 'Vaggelis4',
             description: 'GrandChildren8',
             children: [],
@@ -78,12 +78,12 @@ const TREE_DATA: TreeData[] = [
     ],
   },
   {
-    id: 2,
+    id: 11,
     name: 'John2',
     description: 'tyu2',
     children: [
       {
-        id: 6,
+        id: 12,
         name: 'Ken',
         description: 'children',
         children: [],

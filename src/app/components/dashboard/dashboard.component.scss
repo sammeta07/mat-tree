@@ -21,6 +21,7 @@
   min-height: 24px;
   height: 24px;
   font-weight: 600;
+  font-size: larger;
   // margin-bottom: 2px;
 }
 
@@ -107,4 +108,16 @@ mat-card {
 // mat tree node names
 .tree-node-name-btn:hover {
   cursor: pointer;
+}
+.example-form-field {
+  position: relative;
+  left: 0;
+  top: 0;
+  // height: 30px;
+}
+.activechildNodeBgColor {
+  background-color: rgb(255, 177, 177);
+}
+.activeParentNodeBgColor {
+  background-color: rgb(131, 250, 107);
 }

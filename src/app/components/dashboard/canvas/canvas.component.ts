@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-canvas',
@@ -9,6 +10,7 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class CanvasComponent implements OnInit {
   canvasId = {};
+  searchAttribute!: string;
 
   constructor(private activatedRoute: ActivatedRoute) {
     this.activatedRoute.params.subscribe((params) => {
@@ -21,8 +23,23 @@ export class CanvasComponent implements OnInit {
       this.canvas.push('canvas ' + i);
     }
     for (let i = 0; i < 20; i++) {
-      this.attributes.push('attributes  ' + i);
+      this.attributes.push('attributes ' + i);
+      this.temp = JSON.parse(JSON.stringify(this.attributes));
     }
+  }
+
+  onSearchArributes(event: any) {
+    let searchText = event.target.value.toLowerCase();
+    console.log(searchText);
+
+    this.attributes = this.temp.filter((x) =>
+      x.toLowerCase().includes(searchText)
+    );
+  }
+
+  onClearSearchAttributes() {
+    this.searchAttribute = '';
+    this.attributes = this.temp;
   }
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
@@ -32,4 +49,5 @@ export class CanvasComponent implements OnInit {
   originally bred for hunting.`;
 
   attributes: string[] = [];
+  temp: string[] = [];
 }

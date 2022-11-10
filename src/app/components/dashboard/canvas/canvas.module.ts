@@ -6,6 +6,7 @@ import { CanvasComponent } from './canvas.component';
 import { AngularSplitModule } from 'angular-split';
 import { AngularMaterialModule } from 'src/app/shared/material-design/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [CanvasComponent],
@@ -15,6 +16,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     AngularSplitModule,
     AngularMaterialModule,
     FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class CanvasModule {}

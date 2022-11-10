@@ -1,22 +1,22 @@
 <as-split direction="horizontal">
-  <as-split-area
-    [size]="80"
-    style="background-color: rgb(241, 71, 9); overflow: hidden"
-    fxLayout="column"
-    fxLayoutGap="1px"
-    fxLayoutAlign="start stretch"
-  >
+  <as-split-area [size]="80" style="background-color: rgb(241, 71, 9); overflow: hidden" fxLayout="column"
+    fxLayoutGap="1px" fxLayoutAlign="start stretch">
     <mat-toolbar fxFlex="5">
-      <h1 class="example-app-name">Search</h1>
+      <h1 class="example-app-name">Tab 1</h1>
       <span class="example-spacer"></span>
-      <button mat-button (click)="accordion.openAll()">Expand All</button>
-      <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+      <button mat-button (click)="accordion.openAll()">
+        <mat-icon>expand_more</mat-icon>
+      </button>
+      <button mat-button (click)="accordion.closeAll()">
+        <mat-icon>expand_less</mat-icon>
+      </button>
     </mat-toolbar>
 
     <mat-card fxFlex="*" style="overflow: auto">
-      <mat-accordion class="example-headers-align" multi>
+      <mat-accordion class="example-headers-align" multi displayMode="flat" fxLayout="column" fxLayoutGap="10px">
         <mat-expansion-panel *ngFor="let c of canvas">
-          <mat-expansion-panel-header style="height: 30px">
+          <mat-expansion-panel-header collapsedHeight="40px" expandedHeight="40px"
+            style="background-color: rgb(222, 250, 227)">
             <mat-panel-title> {{ c }} </mat-panel-title>
             <mat-panel-description>
               {{ canvasId | json }}
@@ -32,27 +32,28 @@
     </mat-card>
   </as-split-area>
 
-  <as-split-area
-    [size]="20"
-    style="background-color: rgb(241, 71, 9); overflow: hidden"
-    fxLayout="column"
-    fxLayoutGap="1px"
-    fxLayoutAlign="start stretch"
-  >
-    <mat-toolbar fxFlex="5">
-      <h1 class="example-app-name">Search</h1>
+  <as-split-area [size]="20" style="background-color: rgb(241, 71, 9); overflow: hidden" fxLayout="column"
+    fxLayoutGap="1px" fxLayoutAlign="start stretch">
+    <mat-toolbar fxFlex="5" style="padding-left: 5px; padding-right: 5px">
+      <mat-form-field style="width: 100%">
+        <input matInput type="text" placeholder="Search..." [(ngModel)]="searchAttribute"
+          (keyup)="onSearchArributes($event)" />
+        <button mat-button *ngIf="searchAttribute" matSuffix mat-icon-button aria-label="Clear"
+          (click)="onClearSearchAttributes()">
+          <mat-icon>close</mat-icon>
+        </button>
+        <button mat-button *ngIf="!searchAttribute" matSuffix mat-icon-button aria-label="Search">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
       <span class="example-spacer"></span>
-      <button mat-icon-button>
-        <mat-icon>search</mat-icon>
-      </button>
+
+      <!-- <button mat-icon-button style="width: 10%">
+        <mat-icon>edit</mat-icon>
+      </button> -->
     </mat-toolbar>
 
-    <mat-card
-      fxFlex="*"
-      style="overflow: auto"
-      fxLayout="column"
-      fxLayoutGap="5px"
-    >
+    <mat-card fxFlex="*" style="overflow: auto" fxLayout="column" fxLayoutGap="5px">
       <mat-toolbar *ngFor="let a of attributes">
         <h1>{{ a }}</h1>
       </mat-toolbar>

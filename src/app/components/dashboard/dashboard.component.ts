@@ -22,7 +22,10 @@ import { TreeFunctionService } from './tree-function.service';
 
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { TreeData } from './tree-data.model';
-import { of as observableOf } from 'rxjs';
+import { filter, of as observableOf } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,30 +41,64 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   leftSidenavWidth = 30;
   contentWidth = 70;
+  activeNode: TreeData | undefined;
 
   ngOnInit(): void {
     this.nestedTreeControl = new NestedTreeControl<TreeData>(this._getChildren);
-    this.nestedDataSource = new MatTreeNestedDataSource();
+    this.nestedDataSource = new MatTreeNestedDataSource<TreeData>();
+
     this.dataService._dataChange.subscribe((data) => {
       this.nestedDataSource.data = data;
-      Object.keys(data).forEach((key) => {
+      this.nestedTreeControl.dataNodes = data;
+      this.nestedTreeControl.expandAll();
+
+      Object.keys(this.nestedDataSource.data).forEach((key) => {
         this.setParent(data[key as unknown as number], null);
       });
+    });
+
+    if (this.urlData.id == 1) {
+      let urlId: number = this.urlData.url.substring(
+        this.urlData.url.lastIndexOf('/') + 1
+      );
+      this.findActiveNode(this.nestedDataSource.data, urlId);
+    }
+  }
+
+  findActiveNode(data: TreeData[], urlId: number) {
+    let an: TreeData;
+    data.forEach((e, index) => {
+      if (e.id == urlId) {
+        this.activeNode = data[index];
+      } else if (e.children) {
+        this.findActiveNode(e.children, urlId);
+      }
     });
   }
 
   private _getChildren = (node: TreeData) => observableOf(node.children);
   hasNestedChild = (_: number, nodeData: TreeData) =>
-    nodeData.children.length > 0;
+    !!nodeData.children && nodeData.children.length > 0;
 
   ngAfterViewInit() {}
   showFiller = false;
+  urlData: any;
+  canvasId = {};
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     public sharedService: SharedService,
     private renderer: Renderer2,
     private dataService: TreeDataService,
     private treeFunctionService: TreeFunctionService
-  ) {}
+  ) {
+    // this will check reload
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        this.urlData = event;
+      });
+  }
 
   ngOnDestroy(): void {}
 
@@ -96,8 +133,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   checkAllParents(node: TreeData) {
-    console.log(node);
-
     if (node.parent) {
       const descendants = this.nestedTreeControl.getDescendants(node.parent);
       node.parent.selected = descendants.every((child) => child.selected);
@@ -117,25 +152,97 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addNewItem(node: any) {}
 
-  // setChildOk(text: string, node: TreeData[]) {
-  //   this.nestedTreeControl.expandAll();
-  //   text = text.toLowerCase();
-  //   node.forEach((x) => {
-  //     x.MenuData = x.MenuData.toLowerCase();
-  //     x.ok = x.MenuData.indexOf(text) >= 0;
-  //     if (x.parent) {
-  //       this.setParentOk(text, x.parent, x.ok);
-  //     }
-  //     if (x.children) {
-  //       this.setChildOk(text, x.children);
-  //     }
-  //   });
-  // }
+  searchText = '';
+  onClearSearch() {
+    this.searchText = '';
+    this.refreshTreeData();
+  }
 
-  // setParentOk(text: string, node: TreeData, ok: boolean) {
-  //   node.ok = node.ok || ok || node.name.indexOf(text) >= 0;
-  //   if (node.parent) {
-  //     this.setParentOk(text, node.parent, node.ok);
-  //   }
-  // }
+  setChildOk(text: string, node: TreeData[]) {
+    node.forEach((x: TreeData) => {
+      x.ok = x.name.toLowerCase().indexOf(text.toLowerCase()) >= 0;
+      if (x.parent) this.setParentOk(text, x.parent, x.ok);
+      if (x.children) this.setChildOk(text, x.children);
+    });
+  }
+  setParentOk(text: string, node: TreeData, ok: boolean) {
+    node.ok =
+      ok || node.ok || node.name.toLowerCase().indexOf(text.toLowerCase()) >= 0;
+    if (node.parent) this.setParentOk(text, node.parent, node.ok);
+  }
+
+  //For check the values
+  getList2(node: TreeData[], result: any = null) {
+    result = result || {};
+    node.forEach((x: TreeData) => {
+      result[x.name] = {};
+      result[x.name].ok = x.ok;
+      if (x.children) result[x.name].children = this.getList2(x.children);
+    });
+    return result;
+  }
+  //Another way to check the values, we can not use {{datasource.node}}
+  getList(node: TreeData[]) {
+    return node.map((x: any) => {
+      const r: any = {
+        name: x.name + ' - ' + x.ok,
+        children: x.children ? this.getList(x.children) : null,
+      };
+      if (!r.children) delete r.children;
+      return r;
+    });
+  }
+
+  onClickNode(node: TreeData, isChild: string) {
+    console.log(node);
+    // let str = JSON.parse(JSON.stringify(node));
+    localStorage.setItem('activeNodeId', JSON.stringify(node.id));
+  }
+
+  pokemonControl = new FormControl('');
+  pokemonGroups: PokemonGroup[] = [
+    {
+      name: 'Grass',
+      pokemon: [
+        { value: 'bulbasaur-0', viewValue: 'Bulbasaur' },
+        { value: 'oddish-1', viewValue: 'Oddish' },
+        { value: 'bellsprout-2', viewValue: 'Bellsprout' },
+      ],
+    },
+    {
+      name: 'Water',
+      pokemon: [
+        { value: 'squirtle-3', viewValue: 'Squirtle' },
+        { value: 'psyduck-4', viewValue: 'Psyduck' },
+        { value: 'horsea-5', viewValue: 'Horsea' },
+      ],
+    },
+    {
+      name: 'Fire',
+      disabled: true,
+      pokemon: [
+        { value: 'charmander-6', viewValue: 'Charmander' },
+        { value: 'vulpix-7', viewValue: 'Vulpix' },
+        { value: 'flareon-8', viewValue: 'Flareon' },
+      ],
+    },
+    {
+      name: 'Psychic',
+      pokemon: [
+        { value: 'mew-9', viewValue: 'Mew' },
+        { value: 'mewtwo-10', viewValue: 'Mewtwo' },
+      ],
+    },
+  ];
+}
+
+interface Pokemon {
+  value: string;
+  viewValue: string;
+}
+
+interface PokemonGroup {
+  disabled?: boolean;
+  name: string;
+  pokemon: Pokemon[];
 }
