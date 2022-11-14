@@ -48,10 +48,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.nestedDataSource = new MatTreeNestedDataSource<TreeData>();
 
     this.dataService._dataChange.subscribe((data) => {
+      console.log(this.nestedDataSource, this.nestedTreeControl);
+
       this.nestedDataSource.data = data;
       this.nestedTreeControl.dataNodes = data;
-      this.nestedTreeControl.expandAll();
 
+      this.nestedTreeControl.expandAll();
       Object.keys(this.nestedDataSource.data).forEach((key) => {
         this.setParent(data[key as unknown as number], null);
       });
@@ -197,6 +199,36 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log(node);
     // let str = JSON.parse(JSON.stringify(node));
     localStorage.setItem('activeNodeId', JSON.stringify(node.id));
+  }
+
+  grandParent: TreeData = {
+    id: 0,
+    name: '',
+    description: '',
+    children: [],
+    selected: false,
+    indeterminate: false,
+    parent: undefined,
+    ok: false,
+  };
+  addDialog(isTop: string, currentNode: TreeData, action: string): void {
+    this.onClearSearch();
+    console.log(isTop, currentNode, action);
+
+    // const dialogRef = this.dialog.open(AddComponent, {
+    //   width: '500px',
+    //   data: {
+    //     allData: this.nestedDataSource.data,
+    //     currentNode: currentNode,
+    //     MenuId: null,
+    //     MenuData: null,
+    //     MenuDesc: null,
+    //     children: [],
+    //     Action: action,
+    //     isTop: isTop,
+    //   },
+    //   disableClose: true,
+    // });
   }
 
   pokemonControl = new FormControl('');

@@ -120,11 +120,11 @@ export interface TreeData {
   name: string;
   description: string;
   children: TreeData[];
-  selected?: boolean;
-  indeterminate?: boolean;
-  parent?: any;
+  parent?: TreeData | undefined;
 
-  ok?: boolean;
+  indeterminate: boolean;
+  selected: boolean;
+  ok: boolean;
 }
 
 export interface DialogData {
