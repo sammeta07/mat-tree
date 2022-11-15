@@ -23,7 +23,7 @@ import { TreeFunctionService } from './tree-function.service';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { TreeData } from './tree-data.model';
 import { filter, of as observableOf } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ThrowStmt } from '@angular/compiler';
 
@@ -231,7 +231,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     // });
   }
 
-  pokemonControl = new FormControl('');
+  pokemonControl = new UntypedFormControl('');
   pokemonGroups: PokemonGroup[] = [
     {
       name: 'Grass',
