@@ -25,7 +25,6 @@ import { TreeData } from './tree-data.model';
 import { filter, of as observableOf } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-dashboard',
