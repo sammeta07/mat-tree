@@ -19,10 +19,10 @@
             searchText = $event; setChildOk($event, nestedDataSource.data)
           " />
         <button mat-button *ngIf="searchText" matSuffix mat-icon-button aria-label="Clear" (click)="onClearSearch()">
-          <mat-icon>close</mat-icon>
+          <mat-icon color="warn">close</mat-icon>
         </button>
         <button mat-button *ngIf="!searchText" matSuffix mat-icon-button aria-label="Search">
-          <mat-icon>search</mat-icon>
+          <mat-icon color="primary">search</mat-icon>
         </button>
       </mat-form-field>
 
@@ -41,7 +41,7 @@
       <span class="example-spacer"></span>
 
       <button mat-icon-button>
-        <mat-icon color="accent" (click)="addDialog('TOP', grandParent, 'NEW_OBJECT')">add</mat-icon>
+        <mat-icon color="accent" (click)="onClickMenuAction(undefined,undefined)">add</mat-icon>
       </button>
     </mat-toolbar>
 
@@ -49,42 +49,81 @@
       <mat-tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree">
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle
           [style.display]="!searchText || node.ok ? 'block' : 'none'">
-          <div fxLayout="row">
+          <div fxLayout="row" [appScrollIntoView]="node.newInserted">
             <div style="display: block">
               <div class="lines1"></div>
               <div class="lines2"></div>
             </div>
-            <div class="child tree-node" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" fxFlexFill
-              [ngClass]="{ activechildNodeBgColor: activeNode == node }">
-              <button mat-icon-button disabled class="tree-menu-img-btn">
-                X
-              </button>
-              <mat-checkbox class="checklist-leaf-node" (change)="itemToggle($event.checked, node)"
-                [checked]="node.selected"></mat-checkbox>
+            <div class="child" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" fxFlexFill
+              [ngClass]="{ activechildNodeBgColor: node.selected }">
+
+              <div *ngIf="node.nodeType=='child';else expand_icon">
+                <button mat-icon-button class="tree-menu-img-btn">
+                  <mat-icon color="pr">person </mat-icon>
+                </button>
+              </div>
+              <ng-template #expand_icon>
+                <button class="tree-expand-collapse-btn" mat-icon-button matTreeNodeToggle
+                  [attr.aria-label]="'Toggle ' + node.name">
+                  <mat-icon [style.color]="'black'" *ngIf="node.children.length">
+                    {{
+                    nestedTreeControl.isExpanded(node)
+                    ? "expand_more"
+                    : "chevron_right"
+                    }}
+                  </mat-icon>
+                </button>
+              </ng-template>
+
+
+
+
+
+              <mat-checkbox (change)="itemToggle($event.checked, node)" [checked]="node.checked"></mat-checkbox>
               <mat-button [routerLink]="['canvas', node.id]" class="tree-node-name-btn"
                 (click)="activeNode = node; onClickNode(node, 'CHILD')"
-                [innerHTML]="node.name | titlecase | highlight: searchText">
+                [innerHTML]="node.name + ' ' + node.newInserted+ ' ' + node.selected | titlecase | p_highlight: searchText">
                 <!-- {{ node.name }} -->
               </mat-button>
-              <!-- <div [innerHTML]="node.name | titlecase | highlight: searchText" class="nodeText"></div> -->
               <span style="flex: 1 1 auto"></span>
-              <button mat-icon-button (click)="addNewItem(node)" class="tree-menu-btn">
+
+              <!--context menu child  -->
+              <button mat-icon-button [matMenuTriggerFor]="menu1" aria-label="Example icon-button with a menu"
+                class="tree-menu-btn">
                 <mat-icon>more_vert</mat-icon>
               </button>
+              <mat-menu #menu1="matMenu" xPosition="after">
+                <div *ngIf="node.nodeType=='parent';else child_content1">
+                  <button mat-menu-item (click)="onClickMenuAction(node,menu)" *ngFor="let menu of menuData.parent">
+                    <mat-icon>{{menu.icon}}</mat-icon>
+                    <span>{{menu.label | titlecase}}</span>
+                  </button>
+                </div>
+
+                <ng-template #child_content1>
+                  <button mat-menu-item (click)="onClickMenuAction(node,menu)" *ngFor="let menu of menuData.child">
+                    <mat-icon>{{menu.icon}}</mat-icon>
+                    <span>{{menu.label | titlecase}}</span>
+                  </button>
+                </ng-template>
+              </mat-menu>
+
+
             </div>
           </div>
         </mat-tree-node>
         <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild"
           [style.display]="!searchText || node.ok ? 'block' : 'none'">
-          <div fxLayout="row">
+          <div fxLayout="row" [appScrollIntoView]="node.newInserted">
             <div style="display: block">
               <div class="lines1"></div>
               <div class="lines2"></div>
             </div>
-            <div class="parent tree-node" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" fxFlexFill
-              [ngClass]="{ activeParentNodeBgColor: activeNode == node }">
-              <button class="tree-exp-btn" mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
-                <mat-icon class="mat-icon-rtl-mirror">
+            <div class="parent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px" fxFlexFill
+              [ngClass]="{ activeParentNodeBgColor: node.selected }">
+              <button class="tree-expand-collapse-btn" mat-icon-button matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.name">
+                <mat-icon [style.color]="'black'">
                   {{
                   nestedTreeControl.isExpanded(node)
                   ? "expand_more"
@@ -93,17 +132,30 @@
                 </mat-icon>
               </button>
 
-              <mat-checkbox [checked]="node.selected" [indeterminate]="node.indeterminate && !node.selected"
+              <mat-checkbox [checked]="node.checked" [indeterminate]="node.indeterminate && !node.checked"
                 (change)="itemToggle($event.checked, node)"></mat-checkbox>
+
               <mat-button [routerLink]="['canvas', node.id]" class="tree-node-name-btn"
                 (click)="activeNode = node; onClickNode(node, 'PARENT')"
-                [innerHTML]="node.name | titlecase | highlight: searchText">
+                [innerHTML]="node.name + ' ' + node.newInserted+ ' ' + node.newInserted| titlecase | p_highlight: searchText">
                 <!-- {{ node.name }} -->
               </mat-button>
               <span style="flex: 1 1 auto"></span>
-              <button mat-icon-button (click)="addNewItem(node)" class="tree-menu-btn">
-                <mat-icon>more_vert</mat-icon>
+              <!--context menu parent  -->
+              <button mat-icon-button [matMenuTriggerFor]="menu2" aria-label="Example icon-button with a menu"
+                class="tree-menu-btn">
+                <mat-icon>people</mat-icon>
               </button>
+
+
+              <mat-menu #menu2="matMenu" xPosition="after">
+                <button mat-menu-item (click)="onClickMenuAction(node,menu)" *ngFor="let menu of menuData.parent">
+                  <mat-icon>{{menu.icon}}</mat-icon>
+                  <span>{{menu.label | titlecase}}</span>
+                </button>
+              </mat-menu>
+
+
             </div>
           </div>
           <div [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)" role="group">
@@ -111,7 +163,7 @@
           </div>
         </mat-nested-tree-node>
       </mat-tree>
-      <button class="submit-button" mat-raised-button (click)="submit()">
+      <button mat-raised-button (click)="submit()">
         Submit
       </button>
       <!-- <pre>

@@ -29,6 +29,7 @@ import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 const modules = [
   MatButtonModule,
@@ -76,7 +77,7 @@ const modules = [
   MatTreeModule,
   CdkTableModule,
   CdkTreeModule,
-  // DragDropModule,
+  DragDropModule,
   ScrollingModule,
   CommonModule,
   LayoutModule,

@@ -16,7 +16,7 @@ export class TreeFunctionService {
     return array;
   }
 
-  findNodeMaxId(node: TreeData[]) {
+  findNodeMaxId(node: TreeData[]): number {
     const flatArray = this.flatJsonArray([], node);
     const flatArrayWithoutChildren: number[] = [];
     flatArray.forEach((element) => {
@@ -25,12 +25,14 @@ export class TreeFunctionService {
     return Math.max(...flatArrayWithoutChildren);
   }
 
-  findPosition(id: number, data: TreeData[]): any {
+
+  findPosition(id: number, data: TreeData[]): number | undefined {
     for (let i = 0; i < data.length; i += 1) {
       if (id === data[i].id) {
         return i;
       }
     }
+    return undefined;
   }
 
   findFatherNode(id: number, data: TreeData[]): any {
@@ -52,4 +54,17 @@ export class TreeFunctionService {
     }
     return false;
   }
+
+  // findIndex(data: TreeData[], id: number): number {
+  //   let index: number;
+  //   data.findIndex((el, i) => {
+  //     if (el.id == id) {
+  //       index = i;
+  //     }else if(el.children.length){
+  //       this.findIndex(el.children,id);
+  //     }
+  //     return index;
+  //   });
+  //   return 0;
+  // }
 }
