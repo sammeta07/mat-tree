@@ -120,15 +120,46 @@ export interface TreeData {
   name: string;
   description: string;
   children: TreeData[];
-  parent?: TreeData | undefined;
+  parent: TreeData | undefined;
+  path: string;
+  nodeType: string;
+
+  selected?: boolean;
+  newInserted?: boolean;
+
 
   indeterminate: boolean;
-  selected: boolean;
+  checked: boolean;
   ok: boolean;
 }
 
-export interface DialogData {
-  name: string;
-  description: string;
-  component: string;
+// export interface Parent{
+//   id: number;
+//   name: string;
+//   description: string;
+//   children: TreeData[];
+//   parent?: TreeData | undefined;
+//   path: string;
+//   nodeType: string;
+//   indeterminate: boolean;
+//   selected: boolean;
+//   ok: boolean;
+// }
+
+export interface dialogDataTreeNode {
+  allData: TreeData[];
+  currentNode: TreeData | undefined;
+  menu: treeMenuDetails | undefined;
+}
+
+export interface MenuType {
+  parent: treeMenuDetails[];
+  child: treeMenuDetails[];
+}
+export interface treeMenuDetails {
+  label: string;
+  icon: string;
+  operation: string;
+  dialogHeaderName: string;
+  nodeType: string;
 }

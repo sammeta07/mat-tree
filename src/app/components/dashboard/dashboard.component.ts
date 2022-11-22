@@ -1,3 +1,4 @@
+import { AddEditNodesDialogComponent } from './dialogs/add-edit-nodes-dialog/add-edit-nodes-dialog.component';
 import {
   OnInit,
   Component,
@@ -21,10 +22,16 @@ import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { TreeFunctionService } from './tree-function.service';
 
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { TreeData } from './tree-data.model';
+import {
+  dialogDataTreeNode,
+  MenuType,
+  TreeData,
+  treeMenuDetails,
+} from './tree-data.model';
 import { filter, of as observableOf } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,60 +45,88 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // -------------------------- Tree End------------------------------------------------------------------
 
+  menuData: MenuType = {
+    parent: [
+      {
+        nodeType: 'parent',
+        label: 'add',
+        icon: 'add',
+        operation: 'add',
+        dialogHeaderName: '',
+      },
+      {
+        nodeType: 'parent',
+        label: 'rename',
+        icon: 'edit',
+        operation: 'rename',
+        dialogHeaderName: '',
+      },
+      {
+        nodeType: 'parent',
+        label: 'clone',
+        icon: 'folder',
+        operation: 'clone',
+        dialogHeaderName: '',
+      },
+      {
+        nodeType: 'parent',
+        label: 'move',
+        icon: 'edit',
+        operation: 'move',
+        dialogHeaderName: '',
+      },
+      {
+        nodeType: 'parent',
+        label: 'delete',
+        icon: 'delete',
+        operation: 'delete',
+        dialogHeaderName: '',
+      },
+    ],
+    child: [
+      {
+        nodeType: 'child',
+        label: 'rename',
+        icon: 'edit',
+        operation: 'rename',
+        dialogHeaderName: '',
+      },
+      {
+        nodeType: 'child',
+        label: 'move',
+        icon: 'edit',
+        operation: 'move',
+        dialogHeaderName: '',
+      },
+      {
+        nodeType: 'child',
+        label: 'clone',
+        icon: 'folder',
+        operation: 'clone',
+        dialogHeaderName: '',
+      },
+      {
+        nodeType: 'child',
+        label: 'delete',
+        icon: 'delete',
+        operation: 'delete',
+        dialogHeaderName: '',
+      },
+    ],
+  };
+
   leftSidenavWidth = 30;
   contentWidth = 70;
   activeNode: TreeData | undefined;
 
-  ngOnInit(): void {
-    this.nestedTreeControl = new NestedTreeControl<TreeData>(this._getChildren);
-    this.nestedDataSource = new MatTreeNestedDataSource<TreeData>();
-
-    this.dataService._dataChange.subscribe((data) => {
-      console.log(this.nestedDataSource, this.nestedTreeControl);
-
-      this.nestedDataSource.data = data;
-      this.nestedTreeControl.dataNodes = data;
-
-      this.nestedTreeControl.expandAll();
-      Object.keys(this.nestedDataSource.data).forEach((key) => {
-        this.setParent(data[key as unknown as number], null);
-      });
-    });
-
-    if (this.urlData.id == 1) {
-      let urlId: number = this.urlData.url.substring(
-        this.urlData.url.lastIndexOf('/') + 1
-      );
-      this.findActiveNode(this.nestedDataSource.data, urlId);
-    }
-  }
-
-  findActiveNode(data: TreeData[], urlId: number) {
-    let an: TreeData;
-    data.forEach((e, index) => {
-      if (e.id == urlId) {
-        this.activeNode = data[index];
-      } else if (e.children) {
-        this.findActiveNode(e.children, urlId);
-      }
-    });
-  }
-
-  private _getChildren = (node: TreeData) => observableOf(node.children);
-  hasNestedChild = (_: number, nodeData: TreeData) =>
-    !!nodeData.children && nodeData.children.length > 0;
-
-  ngAfterViewInit() {}
-  showFiller = false;
-  urlData: any;
-  canvasId = {};
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     public sharedService: SharedService,
     private renderer: Renderer2,
     private dataService: TreeDataService,
-    private treeFunctionService: TreeFunctionService
+    public dialog: MatDialog,
+    public treeFunctionService: TreeFunctionService
   ) {
     // this will check reload
     this.router.events
@@ -101,12 +136,70 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {}
+  ngOnInit(): void {
+    this.nestedTreeControl = new NestedTreeControl<TreeData>(this._getChildren);
+    this.nestedDataSource = new MatTreeNestedDataSource<TreeData>();
+
+    this.dataService._dataChange.subscribe((data) => {
+      this.nestedDataSource.data = data;
+      this.nestedTreeControl.dataNodes = data;
+      this.nestedTreeControl.expandAll();
+      Object.keys(this.nestedDataSource.data).forEach((key) => {
+        this.setParent(data[key as unknown as number], null);
+      });
+    });
+    console.log(this.nestedDataSource.data);
+
+
+
+    if (this.urlData.id == 1) {
+      let urlId: number = this.urlData.url.substring(
+        this.urlData.url.lastIndexOf('/') + 1
+      );
+      this.findActiveNode(this.nestedDataSource.data, urlId);
+      console.log('activeNode', this.activeNode);
+    }
+  }
+
+  findActiveNode(data: TreeData[], urlId: number) {
+    data.forEach((e, index) => {
+      if (e.id == urlId) {
+        this.activeNode = data[index];
+        this.activeNode.selected = true;
+        this.activeNode.newInserted = true;
+      } else if (e.children) {
+        this.findActiveNode(e.children, urlId);
+      }
+    });
+
+
+  }
+
+  private _getChildren = (node: TreeData) => observableOf(node.children);
+  hasNestedChild = (_: number, nodeData: TreeData) =>
+    !!nodeData.children && nodeData.children.length > 0;
+
+  ngAfterViewInit() { }
+  showFiller = false;
+  urlData: any;
+  canvasId = {};
+
+  ngOnDestroy(): void { }
 
   refreshTreeData() {
     const data = this.nestedDataSource.data;
     this.nestedDataSource.data = [];
     this.nestedDataSource.data = data;
+  }
+
+  resetInitialValues(node: TreeData[]) {
+    node.forEach(item => {
+      item.newInserted = false;
+      item.selected = false;
+      if (item.children) {
+        this.resetInitialValues(item.children);
+      }
+    })
   }
 
   submit() {
@@ -115,7 +208,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         acc.concat(
           this.nestedTreeControl
             .getDescendants(node)
-            .filter((descendant) => descendant.selected)
+            .filter((descendant) => descendant.checked)
             .map((descendant) => descendant.name)
         ),
       [] as string[]
@@ -124,7 +217,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   itemToggle(checked: boolean, node: TreeData) {
-    node.selected = checked;
+    node.checked = checked;
     if (node.children) {
       node.children.forEach((child) => {
         this.itemToggle(checked, child);
@@ -136,11 +229,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   checkAllParents(node: TreeData) {
     if (node.parent) {
       const descendants = this.nestedTreeControl.getDescendants(node.parent);
-      node.parent.selected = descendants.every((child) => child.selected);
-      node.parent.indeterminate = descendants.some((child) => child.selected);
+      node.parent.checked = descendants.every((child) => child.checked);
+      node.parent.indeterminate = descendants.some((child) => child.checked);
       this.checkAllParents(node.parent);
     }
   }
+
 
   setParent(node: TreeData, parent: TreeData | any) {
     node.parent = parent;
@@ -151,7 +245,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  addNewItem(node: any) {}
+  addNewItem(node: any) { }
 
   searchText = '';
   onClearSearch() {
@@ -195,40 +289,67 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onClickNode(node: TreeData, isChild: string) {
-    console.log(node);
-    // let str = JSON.parse(JSON.stringify(node));
-    localStorage.setItem('activeNodeId', JSON.stringify(node.id));
+    this.resetInitialValues(this.nestedDataSource.data);
+    node.selected = true;
+    let data = {
+      checked: node.checked,
+      children: [],
+      description: node.description,
+      id: node.id,
+      indeterminate: node.indeterminate,
+      name: node.name,
+      newInserted: node.newInserted,
+      nodeType: node.nodeType,
+      ok: node.ok,
+      parent: {},
+      path: node.path,
+      selected: node.selected
+    }
+    localStorage.setItem('activeNodeId', JSON.stringify(data));
   }
 
-  grandParent: TreeData = {
-    id: 0,
-    name: '',
-    description: '',
-    children: [],
-    selected: false,
-    indeterminate: false,
-    parent: undefined,
-    ok: false,
-  };
-  addDialog(isTop: string, currentNode: TreeData, action: string): void {
+  onClickMenuAction(
+    currentNode: TreeData | undefined,
+    menu: treeMenuDetails | undefined
+  ) {
+    // console.log(currentNode, menu);
     this.onClearSearch();
-    console.log(isTop, currentNode, action);
+    const data: dialogDataTreeNode = {
+      menu: menu,
+      currentNode: currentNode,
+      allData: this.nestedDataSource.data,
+    };
+    const dialogRef = this.dialog.open(AddEditNodesDialogComponent, {
+      width: '500px',
+      disableClose: true,
+      enterAnimationDuration: '300ms',
+      exitAnimationDuration: '300ms',
+      data: data,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
 
-    // const dialogRef = this.dialog.open(AddComponent, {
-    //   width: '500px',
-    //   data: {
-    //     allData: this.nestedDataSource.data,
-    //     currentNode: currentNode,
-    //     MenuId: null,
-    //     MenuData: null,
-    //     MenuDesc: null,
-    //     children: [],
-    //     Action: action,
-    //     isTop: isTop,
-    //   },
-    //   disableClose: true,
-    // });
+      if (result.update) {
+        if (result.operation == 'add') {
+          this.resetInitialValues(this.nestedDataSource.data);
+          if (currentNode) {
+            currentNode?.children.push(result.data);
+            this.nestedTreeControl.expand(currentNode);
+          } else {
+            this.nestedDataSource.data.push(result.data);
+          }
+          this.dataService._dataChange.next(this.nestedDataSource.data);
+          // this.refreshTreeData();
+        } else if (result.operation == 'rename') {
+          // currentNode = result.data;
+          // this.dataService._dataChange.next(this.nestedDataSource.data);
+
+        }
+
+      }
+    });
   }
+
 
   pokemonControl = new UntypedFormControl('');
   pokemonGroups: PokemonGroup[] = [
