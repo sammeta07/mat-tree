@@ -1,0 +1,35 @@
+<div mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle div fxLayout="row"
+    fxLayoutAlign="space-between center" class="dialog-header">
+    <span class="dialog-heading">{{heading | titlecase}}</span>
+    <span *ngIf="data.currentNode">Menu Id - {{menuId}}</span>
+    <button mat-icon-button>
+        <mat-icon color="warn" (click)="onClickClose()">close</mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <form [formGroup]="newNodeForm" (ngSubmit)="onSaveNewNode()">
+        <mat-card fxLayout="column" fxLayoutAlign="space-around stretch" class="add-edit-dialog-card">
+
+            <mat-form-field appearance="outline">
+                <mat-label>Select Type</mat-label>
+                <mat-select disableRipple required formControlName="nodeType">
+                    <mat-option value="parent">Container</mat-option>
+                    <mat-option value="child">Object</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput required formControlName="name" name="name" type="text">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" name="description" type="text"></textarea>
+            </mat-form-field>
+        </mat-card>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onClickClose()">Cancel</button>
+    <button mat-button cdkFocusInitial (click)="onSaveNewNode()">Save</button>
+</mat-dialog-actions>

@@ -12,22 +12,18 @@
 .example-tree .mat-nested-tree-node div[role="group"] {
   padding-left: 25px;
 }
-.example-tree div[role="group"] > .mat-tree-node {
-  // padding-left: 20px;
-  min-height: 26px; // dont change it must be 26
-}
-
-.tree-node {
-  min-height: 24px;
-  height: 24px;
-  font-weight: 600;
-  font-size: larger;
-  // margin-bottom: 2px;
+// .example-tree div[role="group"] > .mat-tree-node {
+//   padding-left: 20px;
+//   min-height: 26px; // dont change it must be 26
+// }
+.example-tree mat-tree-node,
+.example-tree mat-nested-tree-node {
+  min-height: 26px;
 }
 
 .parent:hover,
 .child:hover {
-  background-color: rgb(240, 240, 219);
+  background-color: rgb(255, 255, 210);
   z-index: 0;
 }
 
@@ -79,14 +75,7 @@ mat-card {
 
 // mat tree checkbox end ----------------------------------------------->>>
 
-.parent {
-  border: 1px solid rgb(90, 86, 86);
-  border-top-left-radius: 50px;
-  border-bottom-left-radius: 50px;
-  border-top-right-radius: 50px;
-  border-bottom-right-radius: 50px;
-  min-width: 0 !important;
-}
+.parent,
 .child {
   border: 1px solid rgb(90, 86, 86);
   border-top-left-radius: 50px;
@@ -94,15 +83,21 @@ mat-card {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
   min-width: 0 !important;
+  font-weight: 600;
+  font-size: larger;
 }
-.tree-exp-btn {
+
+.tree-expand-collapse-btn {
   border-right: 1px solid rgb(90, 86, 86);
+  background-color: rgb(252, 233, 126);
 }
+
 .tree-menu-btn {
   border-left: 1px solid rgb(90, 86, 86);
 }
 .tree-menu-img-btn {
   border-right: 1px solid rgb(90, 86, 86);
+  // background-color: rgb(233, 248, 255);
 }
 
 // mat tree node names
@@ -119,5 +114,5 @@ mat-card {
   background-color: rgb(255, 177, 177);
 }
 .activeParentNodeBgColor {
-  background-color: rgb(131, 250, 107);
+  background-color:rgb(243, 243, 186);
 }
