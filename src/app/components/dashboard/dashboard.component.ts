@@ -322,8 +322,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const dialogRef = this.dialog.open(AddEditNodesDialogComponent, {
       width: '500px',
       disableClose: true,
-      enterAnimationDuration: '300ms',
-      exitAnimationDuration: '300ms',
+      enterAnimationDuration: '100ms',
+      exitAnimationDuration: '100ms',
       data: data,
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -339,11 +339,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             this.nestedDataSource.data.push(result.data);
           }
           this.dataService._dataChange.next(this.nestedDataSource.data);
-          // this.refreshTreeData();
+          this.refreshTreeData();
         } else if (result.operation == 'rename') {
-          // currentNode = result.data;
-          // this.dataService._dataChange.next(this.nestedDataSource.data);
+          currentNode = result.data;
+          this.dataService._dataChange.next(this.nestedDataSource.data);
 
+        }else{
+          this.nestedDataSource.data.push(result.data);
+          this.dataService._dataChange.next(this.nestedDataSource.data);
+          this.refreshTreeData();
         }
 
       }
